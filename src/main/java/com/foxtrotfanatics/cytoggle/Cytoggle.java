@@ -20,12 +20,14 @@ import sx.blah.discord.util.RequestBuffer;
 public class Cytoggle implements IListener<ReadyEvent>
 {
 	public static final long[] ROLE_WHITELIST =
-	{ 521355638027321344L, 360937988265345036L };
+	{ 545007643367047203L, 360937988265345036L };
     //    ^ Bot-Access           ^ ADMIN
 	public static final String ABSOLUTE_PATH_TO_SCRIPT_PARENT_DIRECTORY = "/usr/bin";
 	public static final String ABSOLUTE_PATH_TO_LOG = "/usr/log/cytube-monitor.log";
 	public static final String SCRIPT_NAME = "cytube-toggle";
 	public static final String TOKEN_ENVIROMENT_VARIABLE_KEY = "CYTOGGLE_TOKEN";
+	
+	public IRole[] roles;
 
 	/**
 	 * Starts Bot with Discord Token, register's listener to add Single Command after ReadyEvent
@@ -66,7 +68,7 @@ public class Cytoggle implements IListener<ReadyEvent>
 	{
 		Thread.currentThread().setName("Command-Initalizer");
 		//Specify Role whitelist
-		IRole[] roles = new IRole[ROLE_WHITELIST.length];
+		roles = new IRole[ROLE_WHITELIST.length];
 		for (int x = 0; x < roles.length; x++)
 		{
 			roles[x] = event.getClient().getRoleByID(ROLE_WHITELIST[x]);
@@ -84,6 +86,8 @@ public class Cytoggle implements IListener<ReadyEvent>
 					boolean authorized = false;
 					for (IRole r : roles)
 					{
+						System.out.println("Role: " + r);
+						System.out.println("Author: " + e.getMessage().getAuthor());
 						if (e.getMessage().getAuthor().hasRole(r))//Authorized
 						{
 							authorized = true;
