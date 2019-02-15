@@ -86,8 +86,6 @@ public class Cytoggle implements IListener<ReadyEvent>
 					boolean authorized = false;
 					for (IRole r : roles)
 					{
-						System.out.println("Role: " + r);
-						System.out.println("Author: " + e.getMessage().getAuthor());
 						if (e.getMessage().getAuthor().hasRole(r))//Authorized
 						{
 							authorized = true;
@@ -228,5 +226,6 @@ public class Cytoggle implements IListener<ReadyEvent>
 		RequestBuffer.request(() -> {
 			event.getClient().changePresence(StatusType.DND);
 		});
+		System.out.println("Listening for \"" + SCRIPT_NAME + "\" now");
 	}
 }
