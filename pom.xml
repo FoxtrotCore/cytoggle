@@ -5,12 +5,12 @@
 
 	<groupId>com.foxtrotfanatics</groupId>
 	<artifactId>cytoggle</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 	<packaging>jar</packaging>
 
 	<name>cytoggle</name>
 	<description>Quick and Dirty Discord Bot to interface with script to enable/disable Cytube server</description>
-	<url>http://maven.apache.org</url>
+	<url>https://github.com/FoxtrotCore/cytoggle</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -58,4 +58,8 @@
 			</plugin>
 		</plugins>
 	</build>
+	<organization>
+		<name>FoxTrot Fanatics</name>
+		<url>https://foxtrotfanatics.info</url>
+	</organization>
 </project>

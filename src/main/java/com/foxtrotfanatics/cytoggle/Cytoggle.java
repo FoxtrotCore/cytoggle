@@ -69,9 +69,13 @@ public class Cytoggle implements IListener<ReadyEvent>
 		Thread.currentThread().setName("Command-Initalizer");
 		//Specify Role whitelist
 		roles = new IRole[ROLE_WHITELIST.length];
+		System.out.println("RoleIDs to honor: " + ROLE_WHITELIST.toString());
 		for (int x = 0; x < roles.length; x++)
 		{
-			roles[x] = event.getClient().getRoleByID(ROLE_WHITELIST[x]);
+			System.out.println("RoleID " + (x+1) + ": " + ROLE_WHITELIST[x]);
+			IRole r = event.getClient().getRoleByID(ROLE_WHITELIST[x]);
+			System.out.println("Role Name " + (x+1) + ": " + r.getName());
+			roles[x] = r;
 		}
 		System.out.println("Whitelist Built");
 		//Install Command
@@ -83,11 +87,13 @@ public class Cytoggle implements IListener<ReadyEvent>
 				//Only care if command at all, easiest computation
 				if (e.getMessage().getContent().startsWith(SCRIPT_NAME))
 				{
+					System.out.println("Prefix Recognized");
 					boolean authorized = false;
 					for (IRole r : roles)
 					{
 						if (e.getMessage().getAuthor().hasRole(r))//Authorized
 						{
+							System.out.println("Role " + r.getName() + " Authorized");
 							authorized = true;
 							break;
 						}
@@ -97,6 +103,7 @@ public class Cytoggle implements IListener<ReadyEvent>
 						String content = e.getMessage().getContent();
 						//Split only Arguments into array, accidently includes empty string occasionally
 						String[] arguments = content.substring(13, content.length()).split("\\s+");
+						System.out.println("Arguments Found: " + arguments);
 						boolean acceptAutomaton = true;
 						boolean hasArgument = false;
 						for (int x = 0; x < arguments.length; x++)
@@ -110,6 +117,7 @@ public class Cytoggle implements IListener<ReadyEvent>
 							boolean goodArgument = (x == arguments.length - 1 && (arg.equals("on") || arg.equals("off")));
 							if (!justBlank && !goodFlag && !goodArgument)
 							{
+								System.out.println("Rejected on flag: [" + arg + "]");
 								RequestBuffer.request(() -> {
 									e.getChannel()
 											.sendMessage("**Bad Syntax**\nUsage: `cytube-toggle [options] [on/off]`\r\n"
@@ -130,9 +138,12 @@ public class Cytoggle implements IListener<ReadyEvent>
 						{
 							try
 							{
+								System.out.println("Running Command: " + ABSOLUTE_PATH_TO_SCRIPT_PARENT_DIRECTORY + File.separator + content);
 								//"content" var includes script name with args
 								Process p = Runtime.getRuntime().exec(ABSOLUTE_PATH_TO_SCRIPT_PARENT_DIRECTORY + File.separator + content);
+								System.out.println("Executed...");
 								p.waitFor();
+								System.out.println("Completed....");
 								int exitCode = p.exitValue();
 								//Execution Failed
 								if (exitCode > 1 || exitCode < 0)
@@ -164,6 +175,7 @@ public class Cytoggle implements IListener<ReadyEvent>
 								//Execution Successful
 								else
 								{
+									System.out.println("Execution Successful");
 									if(content.endsWith("off"))
 										RequestBuffer.request(() -> {
 											e.getClient().changePresence(StatusType.DND);
@@ -192,15 +204,13 @@ public class Cytoggle implements IListener<ReadyEvent>
 								RequestBuffer.request(() -> {
 									e.getClient().changePresence(StatusType.IDLE);
 								});
-								RequestBuffer.request(() -> {
-									e.getClient().changePresence(StatusType.IDLE);
-								});
 								e1.printStackTrace();
 							}
 						}
 						//Good Syntax, but does not have required argument
 						else if (acceptAutomaton && !hasArgument)
 						{
+							System.out.println("Bad Syntax in command prefix");
 							RequestBuffer.request(() -> {
 								e.getChannel()
 										.sendMessage("**Bad Syntax**: needs `yes` or `no` argument\nUsage: `cytube-toggle [options] [on/off]`\r\n"
@@ -214,6 +224,7 @@ public class Cytoggle implements IListener<ReadyEvent>
 					}
 					else
 					{
+						System.out.println("User not Authorized");
 						RequestBuffer.request(() -> {
 							e.getAuthor().getOrCreatePMChannel().sendMessage("Not Authorized");
 						});
