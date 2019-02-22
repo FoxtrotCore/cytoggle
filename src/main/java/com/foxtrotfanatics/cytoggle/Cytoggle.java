@@ -27,7 +27,7 @@ public class Cytoggle implements IListener<ReadyEvent>
 	public static final String ABSOLUTE_PATH_TO_LOG = "/var/log/cytube-monitor.log";
 	public static final String SCRIPT_NAME = "cytube-toggle";
 	public static final String TOKEN_ENVIROMENT_VARIABLE_KEY = "CYTOGGLE_TOKEN";
-	
+
 	public IRole[] roles;
 
 	/**
