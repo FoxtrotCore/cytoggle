@@ -4,6 +4,7 @@ package com.foxtrotfanatics.cytoggle;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.events.IListener;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
@@ -20,7 +21,7 @@ import sx.blah.discord.util.RequestBuffer;
 public class Cytoggle implements IListener<ReadyEvent>
 {
 	public static final long[] ROLE_WHITELIST =
-	{ 545007643367047203L, 360937988265345036L };
+	{ 360937988265345036L };
     //    ^ Bot-Access           ^ ADMIN
 	public static final String ABSOLUTE_PATH_TO_SCRIPT_PARENT_DIRECTORY = "/usr/bin";
 	public static final String ABSOLUTE_PATH_TO_LOG = "/usr/log/cytube-monitor.log";
@@ -67,14 +68,37 @@ public class Cytoggle implements IListener<ReadyEvent>
 	public void handle(ReadyEvent event)
 	{
 		Thread.currentThread().setName("Command-Initalizer");
+		try
+		{
+			System.out.println("Arbitrarily Waiting for Completion");
+			Thread.sleep(10000);
+			System.out.println("Trying Installation Now");
+		}
+		catch (InterruptedException e3)
+		{
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
+		List<IRole> allRoles = event.getClient().getRoles();
+		String allRoleListed = "List of all visible Roles:\n";
+		for(int x = 0; x < allRoles.size(); x++)
+		{
+			allRoleListed += allRoles.get(x).getLongID() + " - " + allRoles.get(x).getName() + "\n";
+		}
+		System.out.println(allRoleListed + "End List");
 		//Specify Role whitelist
 		roles = new IRole[ROLE_WHITELIST.length];
-		System.out.println("RoleIDs to honor: " + ROLE_WHITELIST.toString());
+		System.out.println("RoleIDs to honor: ");
 		for (int x = 0; x < roles.length; x++)
 		{
 			System.out.println("RoleID " + (x+1) + ": " + ROLE_WHITELIST[x]);
 			IRole r = event.getClient().getRoleByID(ROLE_WHITELIST[x]);
-			System.out.println("Role Name " + (x+1) + ": " + r.getName());
+			if(r == null)
+			{
+				System.out.println("ERROR: RoleID \"" + ROLE_WHITELIST[x] + "\"is not a viewable Role!");
+				System.exit(20);
+			}
+			System.out.println("Found Role " + (x+1) + ": " + r.getName());
 			roles[x] = r;
 		}
 		System.out.println("Whitelist Built");
